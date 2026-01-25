@@ -80,8 +80,12 @@ public class Utils {
     // ========================
     // Add new student
     // ========================
-    public static boolean addStudent(Student st) {
-        String sql = "INSERT INTO students (name, dob) VALUES (?, ?)";
+    public static boolean addStudent(Student st) { 
+        String sql = "INSERT INTO students (name, dob, id) VALUES (?, ?, ?)";
+         
+        if(st.getId() == 0) {
+            sql = "INSERT INTO students (name, dob) VALUES (?, ?)";
+        }
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -91,6 +95,10 @@ public class Utils {
 
                 ps.setString(1, st.getName());
                 ps.setString(2, st.getDateOfBirth());
+                
+                if(st.getId() != 0) {
+                    ps.setInt(3, st.getId());
+                }
 
                 return ps.executeUpdate() > 0;
             }
